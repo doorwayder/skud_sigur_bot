@@ -68,9 +68,22 @@ class Person:
         else:
             connection = pymysql.connect(host=self.hostname, port=3305, user='root', password='spnx32_0',
                                          db='tc-db-main', charset='utf8', cursorclass=pymysql.cursors.DictCursor)
+
+            if self.id is not None:
+                sql = "SELECT Id, TABID, NAME FROM Personal WHERE Id = {}".format(self.id)
+            else:
+                if self.tab is not None:
+                    sql = "SELECT Id, TABID, NAME FROM Personal WHERE TABID = {}".format(self.tab)
+                else:
+                    if self.name is not None:
+                        sql = "SELECT Id, TABID, NAME FROM Personal WHERE NAME = {}".format(self.name)
+
+
+
+
             try:
                 with connection.cursor() as cursor:
-                    sql = "SELECT NAME FROM Personal WHERE Id = {}".format(id)
+
                     cursor.execute(sql)
 
 
