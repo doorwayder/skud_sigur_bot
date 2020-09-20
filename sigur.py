@@ -17,7 +17,7 @@ class Person:
         else:
             self.name = None
         self.zone = None
-        self.hostname = '172.25.0.7'
+        self.hostname = 'skudsrv'
 
     # def __del__(self):
     #     # TODO ...
