@@ -16,7 +16,6 @@ class Person:
             self.name = name_param
         else:
             self.name = None
-        self.zone = None
         self.hostname = 'skudsrv'
 
     # def __del__(self):
