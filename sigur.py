@@ -62,6 +62,22 @@ class Person:
         else:
             return False
 
+    @property
+    def person_zone_act(self):
+        if self.initialized:
+            connection = pymysql.connect(host=self.hostname, port=3305, user='root', password='spnx32_0',
+                                         db='tc-db-main', charset='utf8', cursorclass=pymysql.cursors.DictCursor)
+            try:
+                with connection.cursor() as cursor:
+                    sql = "SELECT LOCATIONACT FROM Personal WHERE Id = {}".format(self.id)
+                    cursor.execute(sql)
+            finally:
+                connection.close()
+            return cursor.fetchone()['LOCATIONACT']
+        else:
+            print('Person is not initialized')
+            return False
+
     def init_data(self):
         if not (self.id or self.tab or self.name):
             print('Parameters Id, Tab or Name not defined')
@@ -77,7 +93,7 @@ class Person:
                     sql = "SELECT Id, TABID, NAME FROM Personal WHERE TABID = {}".format(self.tab)
                 else:
                     if self.name is not None:
-                        sql = "SELECT Id, TABID, NAME FROM Personal WHERE NAME = {}".format(self.name)
+                        sql = "SELECT Id, TABID, NAME FROM Personal WHERE NAME = '" + str(self.name) + "'"
             try:
                 with connection.cursor() as cursor:
                     cursor.execute(sql)
@@ -92,7 +108,7 @@ class Person:
                 return True
             else:
                 self.initialized = False
-                print('Person not defined')
+                print('Person not found in database')
                 return False
 
     def get_person_photo(self):
@@ -125,4 +141,27 @@ class Person:
             print('Person is not initialized')
             return False
 
+    def search_init(self, search:str):
+        connection = pymysql.connect(host=self.hostname, port=3305, user='root', password='spnx32_0',
+                                     db='tc-db-main', charset='utf8', cursorclass=pymysql.cursors.DictCursor)
+        try:
+            with connection.cursor() as cursor:
+                sql = "SELECT Id, TABID, NAME FROM Personal WHERE NAME LIKE '%" + search + "%'"
+                cursor.execute(sql)
+                result = cursor.fetchall()
+        finally:
+            connection.close()
+        if result:
+            self.id = result[0]['Id']
+            self.tab = int(result[0]['TABID'])
+            self.name = result[0]['NAME']
+            self.initialized = True
+            return True
+        else:
+            self.initialized = False
+            print('Person not found in database')
+            return False
+
+
 # TODO Методы получения фото, полной информации о Person, статистику
+# TODO From Personal STATUS = FIRED or AVAILABLE ## LOCATIONACT (time)  ##

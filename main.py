@@ -1,9 +1,9 @@
 from sigur import *
 
-moa = Person(tab_no=1059)
-if moa.init_data():
-    print(moa.name, moa.id, moa.tab)
-    print(moa.person_zone_name)
-    moa.get_img_info()
-
-
+#person = Person(tab_no=2359)
+person = Person()
+if person.search_init('Булдакова'):
+    print(person.name, person.id, person.tab)
+    print(person.person_zone_name)
+    print(person.person_zone_act)
+    person.get_img_info()
