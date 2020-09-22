@@ -136,6 +136,7 @@ class Person:
             draw_text.text((5, 5), self.name, font=font, fill=('#1C0606'))
             draw_text.text((5, 20), str(self.tab), font=font, fill=('#1C0606'))
             draw_text.text((5, 35), self.person_zone_name, font=font, fill=('#1C0606'))
+            draw_text.text((5, 55), str(self.person_zone_act), font=font, fill=('#1C0606'))
             return photo
         else:
             print('Person is not initialized')
