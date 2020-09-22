@@ -2,6 +2,8 @@ from sigur import *
 import telebot
 
 bot = telebot.TeleBot('1397767064:AAEM9LElXOpDt9R9iLniEpdoRkEEmYHzBEM')
+
+
 @bot.message_handler(content_types=['text'])
 def start_message(message):
     if message.text.isdigit():
@@ -16,7 +18,7 @@ def start_message(message):
     else:
         bot.send_message(183992731, 'Person is not initialized')
 
+
 bot.polling()
 
-#bot.send_message(183992731, 'Hello')
-
+# bot.send_message(183992731, 'Hello')
