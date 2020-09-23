@@ -101,11 +101,15 @@ class Person:
             finally:
                 connection.close()
             if result:
-                self.id = result[0]['Id']
-                self.tab = int(result[0]['TABID'])
-                self.name = result[0]['NAME']
-                self.initialized = True
-                return True
+                if result[0]['TABID'] is None:
+                    self.initialized = False
+                    return False
+                else:
+                    self.id = result[0]['Id']
+                    self.tab = int(result[0]['TABID'])
+                    self.name = result[0]['NAME']
+                    self.initialized = True
+                    return True
             else:
                 self.initialized = False
                 print('Person not found in database')
@@ -123,21 +127,27 @@ class Person:
             finally:
                 # Закрыть соединение (Close connection).
                 connection.close()
-            return cursor.fetchone()['HIRES_RASTER']
+            if cursor.rowcount > 0:
+                return cursor.fetchone()['HIRES_RASTER']
+            else:
+                return False
         else:
-            print('Person is not initialized')
             return False
 
     def get_img_info(self):
         if self.initialized:
-            photo = Image.open(io.BytesIO(self.get_person_photo()))
-            draw_text = ImageDraw.Draw(photo)
-            font = ImageFont.truetype('c:/Windows/Fonts/arial.ttf ', size=16)
-            draw_text.text((5, 5), self.name, font=font, fill=('#1C0606'))
-            draw_text.text((5, 20), str(self.tab), font=font, fill=('#1C0606'))
-            draw_text.text((5, 35), self.person_zone_name, font=font, fill=('#1C0606'))
-            draw_text.text((5, 55), str(self.person_zone_act), font=font, fill=('#1C0606'))
-            return photo
+            img_data = self.get_person_photo()
+            if img_data:
+                photo = Image.open(io.BytesIO(img_data))
+                draw_text = ImageDraw.Draw(photo)
+                font = ImageFont.truetype('c:/Windows/Fonts/arial.ttf ', size=16)
+                draw_text.text((5, 5), self.name, font=font, fill=('#1C0606'))
+                draw_text.text((5, 20), str(self.tab), font=font, fill=('#1C0606'))
+                draw_text.text((5, 35), self.person_zone_name, font=font, fill=('#1C0606'))
+                draw_text.text((5, 55), str(self.person_zone_act), font=font, fill=('#1C0606'))
+                return photo
+            else:
+                return False
         else:
             print('Person is not initialized')
             return False

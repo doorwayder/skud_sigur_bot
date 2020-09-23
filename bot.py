@@ -19,6 +19,6 @@ def start_message(message):
         bot.send_message(183992731, 'Person is not initialized')
 
 
-bot.polling()
+bot.polling(none_stop=True, timeout=150)
 
 # bot.send_message(183992731, 'Hello')
