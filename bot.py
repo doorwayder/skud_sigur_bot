@@ -1,5 +1,6 @@
 from sigur import *
 import telebot
+import time
 
 bot = telebot.TeleBot('1397767064:AAEM9LElXOpDt9R9iLniEpdoRkEEmYHzBEM')
 
@@ -18,7 +19,10 @@ def start_message(message):
     else:
         bot.send_message(183992731, 'Person is not initialized')
 
+while True:
+    try:
+        bot.polling(none_stop=True, timeout=150)
+    except Exception as error:
+        print(error)
+        time.sleep(30)
 
-bot.polling(none_stop=True, timeout=150)
-
-# bot.send_message(183992731, 'Hello')
