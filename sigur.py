@@ -1,3 +1,8 @@
+"""Library for operations with database of Sigur system.
+
+Library works with mysql database.
+It contains methods for get information about persons (staff): TABNO, ID, Name, Photos.
+"""
 import pymysql.cursors
 from PIL import Image, ImageDraw, ImageFont
 import io
@@ -25,12 +30,13 @@ class Person:
 
     @property
     def person_zone(self):
+        """returns location zone of the person: 0 or 1"""
         if self.initialized:
             connection = pymysql.connect(host=self.hostname, port=3305, user='root', password='spnx32_0',
                                              db='tc-db-main', charset='utf8', cursorclass=pymysql.cursors.DictCursor)
             try:
                  with connection.cursor() as cursor:
-                    sql = "SELECT NAME, LOCATIONZONE FROM Personal WHERE Id = {}".format(self.id)
+                    sql = f"SELECT NAME, LOCATIONZONE FROM Personal WHERE Id = {self.id}"
                     cursor.execute(sql)
             finally:
                 connection.close()
@@ -46,7 +52,7 @@ class Person:
         try:
             with connection.cursor() as cursor:
                 tab_str = str(self.tab)
-                sql = 'SELECT Id FROM Personal WHERE TABID = "{}"'.format(tab_str.zfill(10))
+                sql = f'SELECT Id FROM Personal WHERE TABID = "{tab_str.zfill(10)}"'
                 cursor.execute(sql)
         finally:
             connection.close()
@@ -54,6 +60,7 @@ class Person:
 
     @property
     def person_zone_name(self):
+        """returns location zone's name of the person"""
         if self.initialized:
             if self.person_zone == 1:
                 return 'внутренняя территория'
@@ -64,12 +71,13 @@ class Person:
 
     @property
     def person_zone_act(self):
+        """returns date and time of person's location has changed"""
         if self.initialized:
             connection = pymysql.connect(host=self.hostname, port=3305, user='root', password='spnx32_0',
                                          db='tc-db-main', charset='utf8', cursorclass=pymysql.cursors.DictCursor)
             try:
                 with connection.cursor() as cursor:
-                    sql = "SELECT LOCATIONACT FROM Personal WHERE Id = {}".format(self.id)
+                    sql = f"SELECT LOCATIONACT FROM Personal WHERE Id = {self.id}"
                     cursor.execute(sql)
             finally:
                 connection.close()
@@ -79,6 +87,7 @@ class Person:
             return False
 
     def init_data(self):
+        """Initialize """
         if not (self.id or self.tab or self.name):
             print('Parameters Id, Tab or Name not defined')
             return False
@@ -87,13 +96,13 @@ class Person:
                                          db='tc-db-main', charset='utf8', cursorclass=pymysql.cursors.DictCursor)
 
             if self.id is not None:
-                sql = "SELECT Id, TABID, NAME FROM Personal WHERE Id = {}".format(self.id)
+                sql = f"SELECT Id, TABID, NAME FROM Personal WHERE Id = {self.id}"
             else:
                 if self.tab is not None:
-                    sql = "SELECT Id, TABID, NAME FROM Personal WHERE TABID = {}".format(self.tab)
+                    sql = f"SELECT Id, TABID, NAME FROM Personal WHERE TABID = {self.tab}"
                 else:
                     if self.name is not None:
-                        sql = "SELECT Id, TABID, NAME FROM Personal WHERE NAME = '" + str(self.name) + "'"
+                        sql = f"SELECT Id, TABID, NAME FROM Personal WHERE NAME = {self.name}'"
             try:
                 with connection.cursor() as cursor:
                     cursor.execute(sql)
@@ -121,7 +130,7 @@ class Person:
                                          db='tc-db-main', charset='utf8', cursorclass=pymysql.cursors.DictCursor)
             try:
                 with connection.cursor() as cursor:
-                    sql = "SELECT HIRES_RASTER FROM photo WHERE ID = {}".format(self.id)
+                    sql = f"SELECT HIRES_RASTER FROM photo WHERE ID = {self.id}"
                     cursor.execute(sql)
 
             finally:
@@ -157,7 +166,7 @@ class Person:
                                      db='tc-db-main', charset='utf8', cursorclass=pymysql.cursors.DictCursor)
         try:
             with connection.cursor() as cursor:
-                sql = "SELECT Id, TABID, NAME FROM Personal WHERE NAME LIKE '%" + search + "%'"
+                sql = f"SELECT Id, TABID, NAME FROM Personal WHERE NAME LIKE '%{search}%'"
                 cursor.execute(sql)
                 result = cursor.fetchall()
         finally:
