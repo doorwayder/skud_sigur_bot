@@ -1,8 +1,17 @@
+"""STAFF infobot
+
+Works on Sigur v2 library and Telebot (вылетает через несколько дней)
+
+"""
+
 from sigur import *
 import telebot
 import time
 
-bot = telebot.TeleBot('1397767064:AAEM9LElXOpDt9R9iLniEpdoRkEEmYHzBEM')
+TOKEN = '1047143760:AAGB62SzV4J6l5rLzjspM6jr2EemeDDuYJQ'
+CHAT = 183992731
+
+bot = telebot.TeleBot(TOKEN)
 
 
 @bot.message_handler(content_types=['text'])
@@ -15,9 +24,9 @@ def start_message(message):
         person.search_init(message.text)
 
     if person.initialized:
-        bot.send_photo(183992731, person.get_img_info())
+        bot.send_photo(CHAT, person.get_img_info())
     else:
-        bot.send_message(183992731, 'Person is not initialized')
+        bot.send_message(CHAT, 'Person is not initialized')
 
 while True:
     try:
