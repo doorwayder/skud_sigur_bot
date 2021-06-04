@@ -1,6 +1,6 @@
 """STAFF infobot
 
-Works on Sigur v2 library and Telebot (вылетает через несколько дней)
+Works on Sigur v2 library and Telebot
 
 """
 
@@ -27,6 +27,7 @@ def start_message(message):
         bot.send_photo(CHAT, person.get_img_info())
     else:
         bot.send_message(CHAT, 'Person is not initialized')
+
 
 while True:
     try:

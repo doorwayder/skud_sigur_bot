@@ -7,6 +7,7 @@ import pymysql.cursors
 from PIL import Image, ImageDraw, ImageFont
 import io
 
+
 class Person:
 
     def __init__(self, tab_no=None, id_no=None, person_name=None):
@@ -22,11 +23,8 @@ class Person:
             self.name = person_name
         else:
             self.name = None
-        self.hostname = 'skudsrv'
+        self.hostname = 'SERVERNAME'
         self.initialized = False
-
-    # def __del__(self):
-    #     # TODO ...
 
     @property
     def person_zone(self):
@@ -181,7 +179,3 @@ class Person:
             self.initialized = False
             print('Person not found in database')
             return False
-
-
-# TODO Методы получения фото, полной информации о Person, статистику
-# TODO From Personal STATUS = FIRED or AVAILABLE ## LOCATIONACT (time)  ##
